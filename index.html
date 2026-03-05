@@ -132,7 +132,7 @@ footer{background:var(--blk);padding:18px 48px;display:flex;justify-content:spac
   <div class="nbrand">Duoc<span>UC</span></div>
   <div class="nsub">Sistema de<br>Bibliotecas</div>
   <div class="nlinks">
-    <div class="nlink on" onclick="goPage('acceso',this)">Acceso por hora</div>
+    <div class="nlink on" onclick="goPage('acceso',this)">Acceso por Hora</div>
     <div class="nlink"    onclick="goPage('prestamos',this)">Préstamos</div>
   </div>
   <div class="nright">2025</div>
@@ -140,14 +140,14 @@ footer{background:var(--blk);padding:18px 48px;display:flex;justify-content:spac
 
 <div class="hero">
   <div class="hero-eye">Informe · Período 2025 · Sistema de Bibliotecas</div>
-  <h1 class="hero-h">Acceso &amp; <em>Préstamos</em><br>por hora 2025</h1>
+  <h1 class="hero-h">Acceso &amp; <em>Préstamos</em><br>por Hora 2025</h1>
   <p class="hero-d">Análisis horario de acceso y préstamos bibliográficos en las sedes DUOC UC — vistas anual y mensual, mapas de calor interactivos y comparativos detallados por sede para todo el período 2025.</p>
 </div>
 
 <div class="kstrip">
   <div class="kcell"><div class="kn g" id="k1">–</div><div class="klbl">Accesos totales 2025</div><div class="ksub">Suma todas las sedes</div></div>
   <div class="kcell"><div class="kn cy" id="k2">–</div><div class="klbl">Hora punta acceso</div><div class="ksub">Mayor promedio global</div></div>
-  <div class="kcell"><div class="kn pu">123.323</div><div class="klbl">Préstamos 2025</div><div class="ksub">Charge Item · todas las sedes</div></div>
+  <div class="kcell"><div class="kn pu">123.323</div><div class="klbl">Préstamos MBB 2025</div><div class="ksub">Charge Item · todas las sedes</div></div>
   <div class="kcell"><div class="kn gr" id="k4">–</div><div class="klbl">Hora punta préstamos</div><div class="ksub">Mayor volumen acumulado</div></div>
 </div>
 
@@ -220,13 +220,12 @@ footer{background:var(--blk);padding:18px 48px;display:flex;justify-content:spac
 <div class="page" id="page-prestamos">
 <div class="wrap">
   <div class="stop">
-    <div class="sleft"><div class="sbadge">Préstamos</div><div class="sh">Préstamos Bibliográficos y no bibliográficos · Análisis 2025</div></div>
+    <div class="sleft"><div class="sbadge">MBB</div><div class="sh">Préstamos Bibliográficos · Análisis 2025</div></div>
     <div class="sdate">Charge Item · 2025 · 22 sedes</div>
   </div>
-  <div class="sgrid">
+  <div class="sgrid" style="grid-template-columns:repeat(2,1fr)">
     <div class="sc g"> <div class="slb">Total préstamos 2025</div><div class="sn g">123.323</div><div class="ss">Todas las sedes · Charge Item</div></div>
     <div class="sc cy"><div class="slb">Hora punta global</div>   <div class="sn cy" id="lk-hora">–</div><div class="ss" id="lk-hora-sub">–</div></div>
-    <div class="sc pu"><div class="slb">Promedio mensual</div>    <div class="sn pu" id="lk-prom">–</div><div class="ss">Préstamos promedio por mes</div></div>
   </div>
   <div class="hmcard">
     <div class="hmtop"><span class="hmttl">Mapa de calor anual · Préstamos por sede × hora del día (total acumulado 2025)</span><span class="hmhnt">↗ Cursor sobre celda</span></div>
@@ -255,7 +254,7 @@ const PALETTE    = ["#F5A800", "#2AAFE0", "#3DB87A", "#8B6FD4", "#E07A30", "#D44
 const DAYS   = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
 const MNOM   = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 const MCORTO = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
-const HOURS  = Array.from({length:16},(_,i)=>i+8);  // 08:00 – 23:00
+const HOURS  = Array.from({length:24},(_,i)=>i);
 const HOURS_L= [...new Set(Object.keys(LOANS.by_hour_global).map(Number))].sort((a,b)=>a-b);
 const scA='lineal', scM='lineal';
 let curMesAcc=5;
@@ -317,8 +316,6 @@ function updateKPIs(){
   document.getElementById('k4').textContent=ph+':00';
   document.getElementById('lk-hora').textContent=ph+':00';
   document.getElementById('lk-hora-sub').textContent=hTL[hTL.indexOf(Math.max(...hTL))].toLocaleString('es-CL')+' préstamos acumulados';
-  const promMes=Math.round(123323/12);
-  document.getElementById('lk-prom').textContent=promMes.toLocaleString('es-CL');
 }
 
 // ── ACCESO ANUAL ──
@@ -350,7 +347,7 @@ function drawMonthlyAcc(){
     Array.from({length:12},(_,i)=>i+1),(s,m)=>ACC[s].mon_total[String(m)]||0,MCORTO,260);
 }
 function drawAnualHourlyAcc(){
-  const hrs=Array.from({length:16},(_,i)=>i+8);
+  const hrs=Array.from({length:17},(_,i)=>i+6);
   drawMultiLine(document.getElementById('cv-a-hourly'),[...pillsA2],SEDES_ACC,hrs,(s,h)=>ACC[s].ann_curve[String(h)]||0,hrs.map(h=>h+'h'),230);
 }
 
@@ -381,7 +378,7 @@ function getMensualHMData(sede){
 }
 function renderMensualHM(){renderDowHM('m',getMensualHMData(document.getElementById('m-sel').value),scM);}
 function drawMensualHourlyAcc(){
-  const mStr=String(curMesAcc),hrs=Array.from({length:16},(_,i)=>i+8);
+  const mStr=String(curMesAcc),hrs=Array.from({length:17},(_,i)=>i+6);
   drawMultiLine(document.getElementById('cv-m-hourly'),[...pillsM],SEDES_ACC,hrs,(s,h)=>ACC[s].mon_curve[mStr]?.[String(h)]||0,hrs.map(h=>h+'h'),260);
 }
 function drawMensualCompAcc(){
