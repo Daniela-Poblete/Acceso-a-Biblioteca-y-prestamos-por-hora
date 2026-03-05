@@ -220,13 +220,12 @@ footer{background:var(--blk);padding:18px 48px;display:flex;justify-content:spac
 <div class="page" id="page-prestamos">
 <div class="wrap">
   <div class="stop">
-    <div class="sleft"><div class="sbadge">Préstamos</div><div class="sh">Préstamos Bibliográficos y no Bibliográficos · Análisis 2025</div></div>
+    <div class="sleft"><div class="sbadge">MBB</div><div class="sh">Préstamos Bibliográficos · Análisis 2025</div></div>
     <div class="sdate">Charge Item · 2025 · 22 sedes</div>
   </div>
-  <div class="sgrid">
+  <div class="sgrid" style="grid-template-columns:repeat(2,1fr)">
     <div class="sc g"> <div class="slb">Total préstamos 2025</div><div class="sn g">123.323</div><div class="ss">Todas las sedes · Charge Item</div></div>
     <div class="sc cy"><div class="slb">Hora punta global</div>   <div class="sn cy" id="lk-hora">–</div><div class="ss" id="lk-hora-sub">–</div></div>
-    <div class="sc pu"><div class="slb">Sede con más préstamos</div><div class="sn pu sm" id="lk-sede">–</div><div class="ss" id="lk-sede-sub">–</div></div>
   </div>
   <div class="hmcard">
     <div class="hmtop"><span class="hmttl">Mapa de calor anual · Préstamos por sede × hora del día (total acumulado 2025)</span><span class="hmhnt">↗ Cursor sobre celda</span></div>
@@ -317,9 +316,6 @@ function updateKPIs(){
   document.getElementById('k4').textContent=ph+':00';
   document.getElementById('lk-hora').textContent=ph+':00';
   document.getElementById('lk-hora-sub').textContent=hTL[hTL.indexOf(Math.max(...hTL))].toLocaleString('es-CL')+' préstamos acumulados';
-  const topSede=SEDES_LOANS.slice().sort((a,b)=>(LOANS.grand_total[b]||0)-(LOANS.grand_total[a]||0))[0];
-  document.getElementById('lk-sede').textContent=topSede;
-  document.getElementById('lk-sede-sub').textContent=(LOANS.grand_total[topSede]||0).toLocaleString('es-CL')+' préstamos';
 }
 
 // ── ACCESO ANUAL ──
